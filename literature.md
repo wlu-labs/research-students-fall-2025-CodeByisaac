@@ -22,8 +22,8 @@ Institution: Wilfrid Laurier University<br>
 
 ## 3.Survey Papers
   ### Survey paper 1: ISO 15118 as the Enabler of Vehicle-to-Grid Applications
-  Author: Dr. Marc Muntin
-  Published via: IEEE Xplore
+  Author: Dr. Marc Muntin<br>
+  Published via: IEEE Xplore<br>
   V2G Clarity, Germany
 
 | Aspect | Details |
