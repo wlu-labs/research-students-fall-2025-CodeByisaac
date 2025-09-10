@@ -1,12 +1,11 @@
 # Literature Review: Smart Charging and V2G Optimization in EVerest with LLM Decision Support
-Research Focus: Identifying opportunities for Large Language Models to enhance decision making in EV charging systems while respecting the constraints and capabilities of the ISO15118 communication standard in the EVerest framework.
 
 Author: Isaac Adeyeye<br>
 Date: September 2025<br>
 Course: CP493 - Directed research - Department of Physics and Computer Science <br>
 Institution: Wilfrid Laurier University<br>
 
-## 1. Summary
+## Summary
   This review examines the intersections of 
   * Smart charging optimization 
   * Vehicle-to-Grid technology
@@ -17,10 +16,12 @@ Institution: Wilfrid Laurier University<br>
   
   Research gaps: Protocol aware LLM decision making, EVerest framework optimization integration (? more as i read)
   
-## 2. Introduction
+## 1. Introduction
   The rapid adoption of Electic Vehicles presents both opportunites and challenges for power grid stability and optimization. The integration of Vehicle-to-grid technology, enabled by standardized communication protocols like ISO15118, offers potential solutions for grid balancing and energy optimization. ...(more as i read)
 
-## 3.Survey Papers
+  This review focuses on identifying opportunities for Large Language Models to enhance decision making for EV charging systems while respecting the constraints and capabilities of the ISO15118 communication standard in the EVerest framework. 
+
+## 2.Survey Papers
   ### Survey paper 1: ISO 15118 as the Enabler of Vehicle-to-Grid Applications
   Author: Dr. Marc Muntin<br>
   Published via: IEEE Xplore<br>
@@ -44,5 +45,25 @@ M. Müntin, "ISO 15118 as the Enabler of Vehicle-to-Grid Applications," V2G Clar
 
 
 ### Survey Paper 2: A comprehensive review of vehicle-to-grid integration in electric vehicles: Powering the future
+| Aspect | Details |
+|---|---|
 
 ## 3. Research Papers
+### Research Paper 1: Optimizing Electric Vehicles Charging using Large Language Models and Graph Neural Networks
+| Aspect | Details |
+|---|---|
+| Problem Addressed | Challenge of optimizing large scale, real-time EV smart charging and Vehicle-to-Grid operations in dynamic, high dimentional environments, where traditional optimization and RL approaches fail to scale effectively |
+| Key Methodologies | - Combines large language models for sequence modeling with Graph Neural Networks for relational data representation<br> - Uses offline reinforcement learning(Decision Transformer) trained on mixed datasets of optimal and random policy trajectories | 
+| Main Findings and Contributions | - First integration of LLMs in EV charging optimization<br> - Novel graph embedding of the EV charging ecosystem<br> - Superior performance compared to heuristics, online RL like PPO, and traditional optimization<br> - Balances user satisfaction, cost, and grid constraints violations | 
+| Limitiations & Open Questions | - Does not incorporate ISO15118 protocol constaints (real time messaging delays, handshake timing or SECC-EVCC communication states)<br> - Lacks integration with the actual communication stacks or real worls EVSE/EMS setups <br> - Assumes ideal low latency environments | 
+| Relevance to project | Provides architectural and algorithmic foundation for integrating LLM based decision making in EVerest. But it overlooks ISO15118 timing and protocol layer behaviour. Project can extend this incorporating protocol aware decision support ensuring LLM actions comply with ISO15118 constraints like timing, message flows and EVSE status |
+
+## Citation
+S. Orfanoudakis, P. Palensky, and P. P. Vergara, “LLM-GNN Based Optimization for EV Smart Charging,” IEEE Transactions on Smart Grid, 2025.
+
+## Technical details
+* Dataset/testbed: EV2Gym simulator with 50 charging stations, dynamic power limits, and diverse EV arrival/departure times. Offline datasets include Optimal, Random, and Mixed trajectories.
+* Performance Metrics: <br>- User satisfaction(average/minimum)<br> - Power grid violations (kW)<br> - Total cost/reward
+* Key results: <br> - Outperformed baseline RL (PPO): higher satisfaction, lower grid violations<br>- Strong trade-off between user needs and grid stability<br> - Combined datasets (Optimal + Random) led to most robust policy
+
+## Implementation: 
