@@ -7,19 +7,17 @@ Institution: Wilfrid Laurier University<br>
 
 ## Summary
   This review examines the intersections of 
-  * Smart charging optimization 
-  * Vehicle-to-Grid technology
-  * ISO15118 communication protocols
-  * Large Language Model decision support system.<br> 
+  * Decision Support Tools using LLMs for intelligent V2G recommendations 
+  * Agentic AI systems for autonomous charging/discharging
+  * Predictive modeling for optimal timing decisions
+  * ISO15118 communication protocols within the EVerest framework<br>
   
-  Within the context of the EVerest open source framework. <br>
-  
-  Research gaps: Protocol aware LLM decision making, EVerest framework optimization integration (? more as i read)
+  Research gaps: Protocol aware LLM decision making for V2G, EVerest Framework optimization integration. (? more as i read)
   
 ## 1. Introduction
   The rapid adoption of Electic Vehicles presents both opportunites and challenges for power grid stability and optimization. The integration of Vehicle-to-grid technology, enabled by standardized communication protocols like ISO15118, offers potential solutions for grid balancing and energy optimization. ...(more as i read)
 
-  This review focuses on identifying opportunities for Large Language Models to enhance decision making for EV charging systems while respecting the constraints and capabilities of the ISO15118 communication standard in the EVerest framework. 
+  This review focuses on three core components: (1) LLM based decision support tools for intelligent V2G recommendations(when and how EV's should charge or discharge power to the grid), (2) agentic AI systems for autonomous charging/discharging,(3) predictive modelling for optimal timing decisions all within the constraints and capabilities of the ISO15118 communication standard in the EVerest framework.
 
 ## 2.Survey Papers
   ### Survey paper 1: ISO 15118 as the Enabler of Vehicle-to-Grid Applications
@@ -43,10 +41,28 @@ M. Müntin, "ISO 15118 as the Enabler of Vehicle-to-Grid Applications," V2G Clar
 * Communication timing and message sequence are critical for safe V2G operation.  Layered message formats (V2GTP, EXI/XML, TLS). Ideal structure for LLM based parsing, anomaly detection in EV charging sessions.
 * AC vs DC, complexity in AC V2G due to on-board converters presents a key use case for LLMs to assist with real time compliance decisions using semantic protocol interpreation.
 
+## Connection to components:
+* Decision Support: Protocol message structures ideal for LLM parsing and decision making
+* Agentic AI: Standardized negotiation flows enable autonomous agent coordination
+* Predictive modeling: Real time protocol state provides input for timing optimization
 
-### Survey Paper 2: A comprehensive review of vehicle-to-grid integration in electric vehicles: Powering the future
+
+### Survey Paper 2: Multi Agent Reinforcement learning in Intelligent Transport Systems: A Comprehensive Survey
 | Aspect | Details |
 |---|---|
+| Problem Addressed |  Coordinated, autonomous decision making in large scale multi agent ITS environments where traditional control methods fail |
+| Key Methodologies |  Taxonomy of MARL methods: value-based, policy based; Reviewed key algorithms (QMIZ, MAPPO,MADDPG) and ITS simulators(SUMO,CARLA, CityFlow)|
+| Main findings & Contributions |  MARL enables scalable, decentarlized control in ITS. Key challenges are scalability, credit assignment, sim-to-real gap and communication |
+| Limitations & Open Questions | No coverage of protocol aware AI(ISO15118), LLM integration or frameworks like EVerest. Security, real time constraints and cross protocol generalization left open |
+| Relevance to project |  design of agentic, protocol aware AI for V2G. MARL coordination principles map to LLM driven charging agents in ISO15118/EVerest ecosystems |
+
+## Citation
+R. Donatus, K. Ter, O.-O. Ajayi, D. Udekwe, "Multi-Agent Reinforcement Learning in Intelligent Transportation Systems: A Comprehensive Survey," IEEE Access, 2025.
+
+## Key insight for project
+* CTDE-style MARL maps well to multi-agent LLM planning
+* MARL comms bottlenecks echo ISO15118 V2G constraints
+* Sim-to-real gap aligns with predictive modeling needs in EVerest
 
 ## 3. Research Papers
 ### Research Paper 1: Optimizing Electric Vehicles Charging using Large Language Models and Graph Neural Networks
@@ -66,4 +82,8 @@ S. Orfanoudakis, P. Palensky, and P. P. Vergara, “LLM-GNN Based Optimization f
 * Performance Metrics: <br>- User satisfaction(average/minimum)<br> - Power grid violations (kW)<br> - Total cost/reward
 * Key results: <br> - Outperformed baseline RL (PPO): higher satisfaction, lower grid violations<br>- Strong trade-off between user needs and grid stability<br> - Combined datasets (Optimal + Random) led to most robust policy
 
-## Implementation: 
+
+### Research Paper 2: Joint Route Selection and Charging Discharging Scheduling of EVs in V2G Energy Network
+| Aspect | Details |
+|---|---|
+| r | c |
