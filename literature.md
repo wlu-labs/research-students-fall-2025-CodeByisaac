@@ -89,7 +89,7 @@ S. Orfanoudakis, P. Palensky, and P. P. Vergara, “LLM-GNN Based Optimization f
 | Relevance to Project | Shows how scheduling and routing affect V2G efficiency; highlights the need for intelligent, protocol aware decision systems especially thos that can incorporate LLMs and standards like ISO15118 in frameworks like EVerest. |
 
 #### Citation:
-Peng Liu, Chaoyu Wang, Jia Hu, Tingting Fu, Nan Cheng, Ning Zhang, and Xuemin Shen, “Joint Route Selection and Charging Discharging Scheduling of EVs in V2G Energy Network,” IEEE Transactions on Intelligent Transportation Systems, vol. XX, no. XX, pp. 1–14.
+Peng Liu, Chaoyu Wang, Jia Hu, Tingting Fu, Nan Cheng, Ning Zhang, and Xuemin Shen, “Joint Route Selection and Charging Discharging Scheduling of EVs in V2G Energy Network,” IEEE Transactions on Intelligent Transportation Systems.
 
 #### Connection to components:
 * Decision support: need for intelligent decision tools to balance cost, energy and timing under constraints, LLM could improve this with dynamic protocol aware planning.
