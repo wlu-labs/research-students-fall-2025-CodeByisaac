@@ -98,3 +98,19 @@ Peng Liu, Chaoyu Wang, Jia Hu, Tingting Fu, Nan Cheng, Ning Zhang, and Xuemin Sh
 
 ### Research paper 3: Multi-Agent Reinforcement Learning for Intelligent V2G Integration in Future Transportation Systems
 | Aspect | Detail |
+|---|---|
+| Problem Addressed | Uncoordinated EV discharging leads to inefficient peak load shaving in V2G systems; centralized methods compromise scalability and user privacy|
+| Key methodologies | Multi agent reinforcement learning with centralized training and distributed execution using an actor-critic architecture for day ahead discharging schedules.|
+|Main findings & contributions| Demostrated that MARL enables effective peak shaving despite energy forecast inaccuracies; preserves privacy with decentralized decision making; validated with real utility data showing robust performance without exponential training time growth|
+|Limitations & Open questions | requires full retaining when new agents are added; assumes daily discharging which may not be practical; lacks economic modeling of battery degradation costs.|
+|Relevance to project|Highlights the viability of agentic AI systems for autonomous EV coordination within V2G; Reinforces the need for predictive modeling and decentralized decision tools important for ISO15118+LLM+EVerest integration|
+
+#### citation:
+J. Dong, A. Yassine, A. Armitage, and M. S. Hossain, "Multi-Agent Reinforcement Learning for Intelligent V2G Integration in Future Transportation Systems," IEEE Transactions on Intelligent Transportation Systems
+
+#### Connection to components:
+* Decision Support: the need for forecast informed autonomous decision making; can be enhanced with LLM based advisory systems
+
+* Agentic AI: how decentralized MARL agents can coordinate EV discharging without centralized control
+
+* Predictive Modeling: Relies heavily on day-ahead energy forecasting, supporting the role of time-series predictive modeling in V2G scheduling
