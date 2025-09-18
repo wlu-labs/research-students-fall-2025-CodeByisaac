@@ -4,7 +4,7 @@
 ## Action Items due by 2025-09-19 and allocation to Isaac Adeyeye.
 
 [X] Action Item 1:
-Installation of toolkit / Setup/deploy EVerest onto system
+Installation of toolkit (Setup/deploy EVerest onto system)
 
 [X] Action Item 2:
 Run simulations within
