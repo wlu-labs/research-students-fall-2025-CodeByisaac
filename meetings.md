@@ -10,10 +10,10 @@ Installation of toolkit (Setup/deploy EVerest onto system)
 Run simulations within
 
 ## Other Notes & Information
-Important parts in EVerest documentation:
-7. Configure plug & charge
-7.5 OCPP 1.6 and OCPP 2.x configuration
-9. Tutorials
+Important parts in EVerest documentation:<br>
+7. Configure plug & charge<br>
+7.5 OCPP 1.6 and OCPP 2.x configuration<br>
+9. Tutorials<br>
 
 Main goal: Create AI Model to start/stop charging / give power back to grid.
 can also consider LLM API to create smart schedule
