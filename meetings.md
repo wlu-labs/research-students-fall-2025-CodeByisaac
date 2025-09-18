@@ -1,11 +1,19 @@
 # Meeting Minutes
 ## Meeting Information
-**Meeting Date/Time:** meeting_date, meeting_time  
-## Action Items due be due_date and allocation to responsible_name.
+**Meeting Date/Time:** 2025-09-17, 7:00pm  
+## Action Items due by 2025-09-19 and allocation to Isaac Adeyeye.
 
-[X] Action Item 1
+[X] Action Item 1:
+Intallation of toolkit / Setup/deploy EVerest onto system
 
-[X] Action Item 2:  
+[X] Action Item 2:
+Run simulations within
 
 ## Other Notes & Information
-N/A
+Important parts in EVerest documentation:
+7. Configure plug & charge
+7.5 OCPP 1.6 and OCPP 2.x configuration
+9. Tutorials
+
+Main goal: Create AI Model to start/stop charging / give power back to grid.
+           
