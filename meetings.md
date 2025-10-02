@@ -1,6 +1,4 @@
-# Meeting Minutes
-## Meeting Information
-**Meeting Date/Time:** 2025-09-24, 7:00pm  
+# **Meeting Date/Time:** 2025-09-24, 7:00pm  
 ## Action Items due by 2025-09-26 and allocation to Isaac Adeyeye.
 
 [X] Action Item 1:
@@ -16,4 +14,12 @@ Project goal: WHEN to send power back to grid (date/time optimization)<br>
 When/why grid needs power <br>
 ROI Financial optimization, maximizing user benefits
 
-           
+
+# **Meeting Date/Time:** 2025-10-01, 7:00pm  
+## Action Items due by 2025-10-03 and allocation to Isaac Adeyeye.
+
+[X] Action Item 1:
+Create EDA Notebook for data understanding for V2G scheduling project.
+
+
+## Other Notes & Information           
