@@ -23,3 +23,15 @@ Create EDA Notebook for data understanding for V2G scheduling project.
 
 
 ## Other Notes & Information           
+
+# **Meeting Date/Time:** 2025-10-24, 4:00pm  
+## Action Items due by 2025-10-31 and allocation to Isaac Adeyeye.
+
+[X] Action Item 1:
+Build decision engine using identified pricing patterns(Temporal Optimization)<br>
+[X] Action Item 2: Test with simulated scenarios
+
+
+## Other Notes & Information
+Decision logic: Should we run V2G right now based on price/demand?<br>
+Integrates before Arsalan's AI prediction<br>
