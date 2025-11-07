@@ -24,8 +24,8 @@ Create EDA Notebook for data understanding for V2G scheduling project.
 
 ## Other Notes & Information           
 
-# **Meeting Date/Time:** 2025-10-24, 4:00pm  
-## Action Items due by 2025-10-31 and allocation to Isaac Adeyeye.
+# **Meeting Date/Time:** 2025-11-07, 4:00pm  
+## Action Items due by 2025-11-14 and allocation to Isaac Adeyeye.
 
 [X] Action Item 1:
 Build decision engine using identified pricing patterns(Temporal Optimization)<br>
@@ -33,5 +33,14 @@ Build decision engine using identified pricing patterns(Temporal Optimization)<b
 
 
 ## Other Notes & Information
-Decision logic: Should we run V2G right now based on price/demand?<br>
-Integrates before Arsalan's AI prediction<br>
+Completed Grid and User data integration (uploaded results on Wiki)<br>
+
+KEY INSIGHTS:<br>
+Integrated V2G hours: [17, 18, 19, 20]<br>
+Conservative revenue: $0.47/user/year<br>
+Optimistic revenue: $1.31/user/year<br>
+
+SCALE PROJECTION:<br>
+1,000 vehicles: $1,313.88/year<br>
+5,000 vehicles: $6,569.40/year<br>
+10,000 vehicles: $13,138.80/year<br>
