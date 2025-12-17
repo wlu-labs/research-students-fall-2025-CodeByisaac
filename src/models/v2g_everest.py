@@ -35,7 +35,7 @@ class V2GEverest:
         user_id = session_data.get('user_id', 'unknown')
         user_profiles = self.get_user_profile(user_id)
 
-        reason = []
+        reasons = []
         score = 0
 
         #1st check time window
@@ -51,7 +51,7 @@ class V2GEverest:
 
         soc = session_data.get('soc', 50)
         if soc >= 60:
-            reason.append(f"SOC sufficient ({soc}%)")
+            reasons.append(f"SOC sufficient ({soc}%)")
             score += 20
         else:
             return False, 0, "SOC too low, need to charge"

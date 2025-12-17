@@ -1,30 +1,59 @@
 # Introduction
 
-See this how you can add a reference, @knuth84.
+## Background
 
-## Overview
+The transition to electric vehicles (EVs) represents a critical component of global decarbonization efforts. As EV adoption accelerates, Vehicle-to-Grid (V2G) technology emerges as a promising solution to leverage EV batteries as distributed energy storage resources. V2G enables bidirectional power flow, allowing EVs to discharge energy back to the grid during peak demand periods while charging during off-peak hours. This capability offers multiple benefits: grid operators gain flexible capacity to manage demand peaks, EV owners receive financial compensation, and renewable energy integration becomes more feasible.
 
-### Existing System
+However, V2G deployment faces significant challenges. Current systems often rely on fixed scheduling rules that ignore user behaviour patterns, leading to suboptimal participation rates. Effective V2G scheduling must answer three fundamental questions: **WHEN** should discharge occur(temporal alignment with grid needs), **WHY** is it beneficial(economic and grid stability incentives), and **WHO** should participate (user availabilty and preferences).
 
-## Objectives of Project (Must be clearly, precisely defined and must be covered in the work)
+## Problem Statement
 
- 
+Existing V2G scheduling approaches suffer from several limitations:
 
+1. **Fixed Rule-Based Systems**: Most implementations use static time-of-use pricing without considering actual user charging patterns or session characteristics.
 
+2. **Limited User Behaviour Understanding**: Systems fail to leverage historical user data to predict availabilty and optimize participation.
 
+3. **Grid-User Misalignment**: Scheduling decisions prioritize either grid needs or user convenience, but rarely optimize both simultaneously.
 
+4. **Low Participation Rates**: Without personalized, data-driven approaches, V2G participation remains low, limiting the technology's potential impact.
 
+These limitations result in missed opportunities for grid support and reduced economic benefits for EV owners.
 
+## Research Gap
 
+While extensive research exists on V2G technology, grid integration, and economic modeling, there is a notable gap in data-driven scheduling systems that:
 
+- Analyze large-scale real-world charging session data to understand user behaviour patterns
+- Integrate grid pricing and demand data with user availabilty patterns
+- Provide personalized scheduling decisions based on individual user history
+- Demonstrate practical implementation with real-time decision-making capabilities
 
+Most existing work relies on simulated or small-scale datasets, limiting generalizability and practical applicability.
 
+## Proposed Solution
 
+This paper presents a data-driven V2G scheduling system that addresses these gaps through:
 
+1. **Comprehensive Data Analysis**: Analysis of 72,856 real charging sessions from 2,337 EV users to identify patterns in arrival times, session durations, locations, and energy consumption.
 
+2. **Grid-User Integration**: Integration of CAISO grid pricing and demand data with user behaviour patterns to identify optimal V2G windows where both grid needs and user availabilty align.
 
+3. **Intelligent Decision Engine**: A scoring-based decision system that evaluates multiple factors (time windows, user history, battery state, location) to make real-time V2G participation decisions.
 
+4. **Practical Implementation**: Integration with the EVerest charging simulator demonstrating real-time decision-making through MQTT-based communication.
 
+## Contributions
 
+The main contributions of this work are:
 
+1. **Large-scale Real Data Analysis**: First comprehensive analysis of 72,856 real-world charging sessions identifing that only 5.1% are V2G-eligible, with optimal windows occurring during 5-8 PM peak hours.
 
+2. **Integrated Scheduling Framework**: A novel framework combining grid pricing data (WHEN/WHY) with user behaviour patterns (WHO) to identify realistic V2G opportunities.
+
+3. **Working Prototype**: A functional V2G scheduler integrated with EVerest demonstrating real-time decision making capabilities, with potential to increase participation from 5.1% to 12% through targeted engagement.
+
+4. **Economic Analysis**: Quantification of revenue potential showing \$0.47/user/year in conservative scenarios and \$1.31/user/year in optimistic scenarios with improved targeting.
+
+## Paper Organization
+The remainder of this paper is organized as follows: Section II presents the methodology including data collection, preprocessing, and the decision engine design. Section III provides exploratory data analysis and key findings from the charging session dataset. Section IV presents results including revenue calculations and EVerest integration outcomes. Section V dicsusses limitations and future work, and Section VI concludes the paper.

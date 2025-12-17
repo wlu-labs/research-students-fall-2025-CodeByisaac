@@ -3,16 +3,16 @@ project:
   output-dir: _output       # put everything in one place
 
   render:
-    - index.qmd            
+    - index.qmd
 book:
-  title: "Final Project Report"  # Change to your title of the project
-  subtitle: Sub-title of the Project. # Change to your sub-title of the project
-  author: "Name of Student(s)"
-  date: May 18, 2025
+  title: "Data-Driven Scheduling for Vehicle-to-Grid: Insight from 72k Real Charging Sessions"
+  subtitle: "A Comprehensive Analysis of V2G Opportunities Through Grid-User Integration"
+  author: "Isaac Adeyeye"
+  date: December 15, 2025
   reader-mode: true
   page-footer:
     left: |
-      Yadav, M., & Sehra, S. S. (2025). 
+      Yadav, M., & Sehra, S. S. (2025).
     right: |
       This book template was built with <a href="https://quarto.org/">Quarto</a>, Courtesy Dr. Sukhjit Singh Sehra.
   # cover-image: cover.jpg
@@ -51,7 +51,7 @@ format:
     titlepage-header: "The Publisher"
     # Change the following to your names
     titlepage-footer: |
-      last name, first name; last name, first name of authors\
+      Adeyeye, Isaac\
     coverpage: "great-wave"
     coverpage-bg-image: "_extensions/nmfs-opensci/titlepage/images/TheGreatWaveoffKanagawa.jpeg"
     coverpage-title: "Sabudh Passion Project"
@@ -74,7 +74,7 @@ format:
     include-in-header:
       text: |
         % delete. this is for the example w CZ diacritics
-        \usepackage{babel}  
+        \usepackage{babel}
 
 
   # ── 3. EPUB (single file) ────────────────────────────────
@@ -82,4 +82,3 @@ format:
     cover-image: img/coverpage.png     # optional—remove if you don’t have one
     toc: true
     embed-resources: true
-

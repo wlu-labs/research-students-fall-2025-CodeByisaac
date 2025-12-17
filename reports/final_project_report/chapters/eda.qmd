@@ -1,35 +1,143 @@
-# Pre-Processing and Exploratory Data Analysis
-Once you have your dataset, you need to preprocess it to make it suitable for machine learning. This includes cleaning the data, handling missing values, encoding categorical variables, and scaling numerical features. This step is crucial as the accuracy of your model will depend on the quality of your data. 
+# Exploratory Data Analysis
+
+This section presents comprehensive exploratory data analysis of the 72,856 charging sessions, identifying key patterns in user behaviour, temporal distributions, and V2G opportunities.
+
+## Dataset Overview
+
+The Nature EV dataset contains **72,856 charging sessions** from **2,337 unique users** across **multiple months**. Key dataset characteristics:
+
+- **Total Energy**: 1,270,932.52 kWh consumed across all sessions
+- **Average Energy per Session**: 17.44 kWh (median: 14.10 kWh)
+- **Session Duration**: Mean 2.52 hours, median 1.87 hours
+- **Date Range**: Multiple months of continous data collection
+
+## Temporal Patterns
+
+### Arrival Time Distribution
+
+Analysis of arrival times reveals distinct patterns critical for V2G scheduling:
+
+- **Peak Arrival Hours**: 15:00-20:00 (evening rush)
+  - 17:00: 4,063 sessions (5.6%)
+  - 18:00: 4,063 sessions (5.6%)
+  - 19:00: 4,063 sessions (5.6%)
+  - 20:00: 3,722 sessions (5.1%)
+
+- **Low Arrival Hours**: 00:00-08:00 (overnight/early morning)
+  - Minimal activity during these hours
+
+**Key Insight**: Peak arrival time (17:00-20:00) align with grid peak demand periods, creating natural V2G opportunities when users arrive with sufficient battery charge.
+
+### Departure Time Distribution
+
+Departure patterns reveal critical constraints for V2G scheduling:
+
+- **Critical Morning Departure**: 05:00-10:00
+  - 05:00: 1,076 sessions (1.5%)
+  - 06:00: 1,085 sessions (1.5%)
+  - 07:00: 1,409 sessions (1.9%)
+  - 08:00: 1,922 sessions (2.6%)
+  - 09:00: 2,856 sessions (3.9%)
+  - 10:00: 3,567 sessions (4.9%)
+
+**V2G Constraint**: 16.4% of sessions (11,915 sessions) require full charge completion by 5:00 AM, limiting overnight V2G participation for these users.
+
+![Arrival and Depature Patterns](figures/eda_nature_user_patterns.png)
+
+*Figure 1: User behaviour patterns showing arrival times (top left), depature time (top right), session duration distribution (middle left), V2G availability by hour (middle right), location analysis (bottom left), and user clustering (bottom right).*
+
+## Session Duration Analysis
+
+Session duration were categorized to understand V2G potential:
+
+- **Short Sessions (< 2h)**: 37,972 sessions (52.1%)
+  - Quick charging scenarios
+  - Limited V2G potential due to insufficient idle time
+
+- **Medium Session (2-8h)**: 31,716 session (43.5%)
+  - Work/shopping scenarios
+  - Primary V2G opportunity window
+
+- **Long Sessions (> 8h)**: 3,168 sessions (4.3%)
+  - Overnight charging
+  - High V2G potential but constrained by morning depature requirements
 
 
-## Dataset Collection
+### V2G Opportunity Analysis
 
-## Data Pre-processing
+Critical finding: **Average idle time per session is only 0.53 hours**, indicating that most sessions have minimal post-charging idle period.
 
-Some issues to consider to be included:
-- Are there missing values in your data? Is there any pattern in whether or not a particular value is missing? How will the missing values be dealt with? 
+**V2G Eligibility Criteria**: Session with > 2 hours idle time after charging completion
 
-- Are there problems because of data size (rows or columns)? Are some algorithms more affected? Can you come up with any solutions?
+**Result**: Only **3,724 sessions (5.1%)** meet V2G eligibility criteria
 
-- If you are doing any clustering, are there clusters in the data? How many? How well separated are they? Do different methods agree on the number of clusters?
+This low percentage highlights the challenge: while many users charge during peak hours, few have suffient idle time after charging to participate in V2G discharge.
 
-- Is scaling of the variables an issue? For what methods?
+## Location-Based Analysis
 
-- Are there outliers in the data? How did you deal with them? 
+Location analysis reveals signficant variation in V2G potential:
 
-- Does transforming the data simplify any analysis?
+| Location | Sessions | Avg Duration | V2G Availability |
+|----------|----------|--------------|------------------|
+| Apartment | 14,038 | 3.4h | **10.4%** |
+| Public Area | 14,082 | 2.2h | 3.0% |
+| Resort | 8,854 | 2.8h | 4.2% |
+| Hotel | 8,600 | 2.4h | 3.7% |
+| Company | 7,558 | 2.5h | 4.2% |
+| Public Institution | 7,023 | 2.0h | 5.3% |
+| Market | 3,005 | 1.6h | 6.0% |
+| Restaurant | 2,222 | 2.6h | 5.8% |
+| Camping | 1,630 | 4.1h | 1.5% |
+| Public Parking Lot | 3,396 | 0.8h | 1.6% |
 
-## Exploratory Data Analysis and Visualisations 
+**Key Finding**: Apartment locations shows the highest V2G availability (10.4%), making them prime targets for V2G programs. These locations typically have longer parking durations and evening arrival pattern aligning with grid peak hours.
 
-Some of the steps, included here:
+## User Clustering
 
-- Data visualization: Data visualization is the process of creating graphs and charts to help you understand the patterns and trends in the data. This step can help you identify outliers and anomalies in the data.
+User behaviour clustering identified distinct user segments:
 
-- Statistical analysis: Statistical analysis involves applying statistical methods to the data to identify patterns, trends, and relationships. This step can help you identify correlations between variables and understand the distribution of the data.
+- **Evening Chargers** (21.7%): 506 users
+  - Average arrival: 19:30
+  - Average duration: 3.4 hours
+  - High V2G potential due to peak-hour arrivals
 
-- Feature selection: Feature selection is the process of selecting the most important variables that will be used in the machine learning model. This step can help you identify which variables are most predictive and which variables can be ignored.
+- **Work Chargers**: Users charging during work hours (09:00-17:00)
+  - Moderate V2G potential
+  - Consistent weekday patterns
 
-- Dimensionality reduction: Dimensionality reduction is the process of reducing the number of variables in the data set. This step can help you reduce the complexity of the model and improve its performance.
+- **Overnight Chargers**: Users charging late evening/overnight
+  - High duration but constrained by morning depatures
+  - Limited V2G participation due to timing
+
+## Grid-User Integration Analysis
+
+Integration of grid data with user patterns reveals the optimal V2G window:
+
+![Grid-User Integration Analysis](figures/GridandUserData_integration_analysis.png)
+
+*Figure 2: Integration analysis showing hourly opportunity scores (top left), grid vs. user availability (top right), and composite V2G opportunity scores combining grid needs with user behaviour patterns.*
+
+**Integrated V2G Window**: 17:00-20:00 (4-hour period)
+
+This window represents the intersection of:
+- Grid optimal hours (high prices, high demand)
+- User peak arrival hours (15:00-20:00)
+- Sufficient session duration for V2G participation
+
+**Composite Scores**: Hour 17:00-20:00 achieve scores of 100/100, indicating perfect alignment between grid needs and user availability.
+
+## Key Findings Summary
+
+1. **Low V2G Availability**: Only 5.1% of sessions are V2G-eligible, primarily due to insufficient idle time after charging completion.
+
+2. **Temporal Alignment**: Peak arrival times (17:00-20:00) align with grid peak demand, creating natural V2G opportunities.
+
+3. **Location Matters**: Apartment locations show 10.4% V2G availability, more than double the overall average.
+
+4. **Morning Constraints**: 16.24% of sessions require full charge by 5:00 AM, limiting overnight V2G participation.
+
+5. **Optimal Window**: 17:00-20:00 represents the ideal V2G window where grid needs and user availability perfectly align.
+
+These finding inform the design of the decision engine and targeting strategies for V2G participation.
 
 
-## Other Related Sections (Optional)
