@@ -1,143 +1,45 @@
 # Methodology
 
-This section describes the data collection process, preprocessing steps, analysis methodology, and the design of the V2G decision engine.
-
 ## Data Collection
 
 ### User Charging Session Data
 
-We analyzed the Nature EV dataset, containing 72,856 real charging sessions from 2,337 unique EV users. The Dataset includes:
+The Nature EV dataset provided 72,856 charging sessions from 2,337 unique users collected over muliple months. Each session record includes user ID, charger ID, start/end timestamps, energy consumed, location type, and state of charge.
 
-- **Session Metadata**: UserID, Charger ID, Start/End timestamps
-- **Temporal Features**: Arrival hour, depature hour, session duration
-- **Energy Data**: Energy consumed per session (kWh)
-- **Location Information**: Charging location type (apartment, resort, company, etc.)
-- **Battery State**: State of charge (SOC) information where available
+We extracted temporal features including arrival hour, departure hour, and total session duration. The dataset shows diversity, session durations range from quick 15-minute charges to overnight 12+ hour sessions with locations spanning residential apartments to public parking lots. 
 
-The dataset spans multiple months and includes diverse user behaviours across different locations and time periods, providing a representative sample of real-world EV charging patterns.
+### Grid Data
 
-### Grid Pricing and Demand Data
-
-Grid data was collected from the California Independent System Operator (CAISO) through the GridStatus API. This includes:
-
-- **Hourly Electricity Prices**: Real-time and day-ahead pricing data
-- **Grid Demand Patterns**: Hourly demand and profiles identifying peak periods
-- **V2G Opportunity Windows**: Calculated optimal discharge hours based on price differentials
-
-The integration of CAISO data provides the "WHEN" and "WHY" component of V2G scheduling, identifying periods when grid demand is high and price differentials make V2G economically viable.
+Grid pricing and demand data came from the California Independent System Operator (CAISO) via the GridStatus API. We collected hourly electricity prices (both real-time and day-ahead) and demand profiles to identify peak periods. The analysis revealed that prices peak during 17:00-20:00, coinciding with evening demand surges. The average price differential between peak and off-peak periods was $0.0336/kWh, which forms the basis for our revenue calculations.
 
 ## Data Preprocessing
 
-### Charging Session Preprocessing
+Processing the raw charging data required several steps. We calculated session duration by subtracting start from end timestamps, then categorized sessions as short <2h, medium 2-8h, or long >8h. Session >48 hours were removed.
 
-The raw charging session data underwent several preprocessing steps:
-1. **Temporal Feature Extraction**:
-   - Calculated arrival hour, departure hour, and session duration from timestamps
-   - Identified peak arrival hours (15:00-20:00) and critical morning depature windows (05:00-10:00)
-
-2. **Duration Analysis**:
-   - Categorized sessions as Short (< 2h), Medium (2-8h), or Long (> 8h)
-   - Removed extreme outliers (sessions > 48 hours duration)
-   - Calculated charging time vs. idle time for each session
-
-3. **V2G Eligibility Determination**:
-   - Identified session with > 2 hours of idle time after charging completion
-   - Filtered sessions occurring during optimal grid hours (17:00-20:00)
-   - Applied battery SOC constraints (minimum 60% SOC for V2G participation)
-
-4. **Location-Based Analysis**:
-   - Grouped sessions by location type
-   - Calculated V2G availability rates per location category
-   - Identified high-value locations (apartments: 10.4% V2G availability, resorts: 4.2%)
-
-### Grid Data Processing
-
-Grid data processing involved:
-
-1. **Price Analysis**:
-   - Calculated average hourly prices across the analysis period
-   - Identified optimal discharge hours (17:00-20:00) with highest price differentials
-   - Computed revenue per kWh for V2G operations (\$0.0336/kWh)
-
-2. **Demand Pattern Analysis**:
-   - Mapped hourly demand profiles
-   - Identified peak demand periods aligning with pricing peaks
-   - Created composite scores combining price and demand signals
+For V2G eligibility, idle time was defined as the period between charging completion and vehicle departure. Charging completion time was estimated using the energy consumed and typical charging rates. Sessions with more than two hours of idle time were classified as V2G candidates.
 
 ## Integration Methodology
 
-### Grid-User Data Integration
+The core innovation was in combining grid signals with user behaviour patterns. Grid data tells us when prices are high and demand peaks (17:00-20:00), while user data shows when vehicles are actually parked and available. The intersection ofthese creates realistic V2G opportunities.
 
-The integration process combines grid signals with user behaviour patterns:
+We developed hourly opportunity scores that combine:
+- Grid optimality (40 points): Is this a peak pricing/demand hour?
+- User availability (30 points): Are users typically parked during this hour?
+- Location value (20 points): Does this location type show high V2G potential?
+- Battery state (10 points): Is SOC sufficient for discharge?
+Sessions scoring >= 70 trigger V2G activation.
+This threshold came from testing different combinations and balancing participation rates with economic viability.
 
-1. **Temporal Overlap Identification**:
-   - Grid optimal hours: 17:00-20:00 (peak pricing and demand)
-   - User peak arrival hours: 15:00-20:00
-   - **Integrated V2G window**: 17:00-20:00 (4-hour window)
+## Decision Engine Implementation
 
-2. **Composite Scoring System**:
-   - Hourly opportunity scores calculated for each hour of the day
-   - Scores combine: Grid optimally (40 points), user availability (30 points), location value (20 points), battery state (10 points)
-   - Threshold: Score >= 70 for V2G activation
+The decision engine is implemented in Python with two main components: a standalone prototype (v2g_decision_demo.py) for testing, and an EVerest integration module (v2g_everest.py) for real-time operation.
 
-3. **User Segmentation**:
-   - Clustered users by behaviour patterns (evening chargers, work chargers, etc.)
-   - Identified high-value user segments with higher V2G availability
-   - Enabled targeted engagement strategies
+The core decision logic follows this sequence:
+1. Check if current hour falls within optimal window [17, 18, 19, 20]
+2. Verify session duration ≥ 3 hours (ensures sufficient idle time)
+3. Evaluate location type (apartments score highest at 20 points)
+4. Confirm battery SOC ≥ 60% (safety threshold to avoid deep discharge)If all checks pass and total score ≥ 70, the system sends a -5kW power limit command to EVerest's Energy Manager via MQTT, initiating discharge. The negative value indicates bidirectional flow back to grid.
 
-## Decision Engine Design
-
-### Scoring-Based Decision system
-
-The V2G decision engine employs a multi-factor scoring system:
-
-**Time Window Check (40 points)**:
-- Sessions occurring during 17:00-20:00 recieve full points
-- Outside this window: automatic rejection (score = 0)
-
-**Duration Check (30 points)**:
-- Sessions with duration >= 3 hours receive full points
-- Shorter sessions rejected (insufficient idle time)
-
-**Location Check (20 points)**:
-- High-value locations (apartment, resort, camping): 20 points
-- Moderate locations: 10 points
-- Low-value locations: 0 points
-
-**Battery State Check (10 points)**:
-- SOC >= 60%: 10 points
-- SOC < 60%: automatic rejection (need to charge first)
-
-**Decision Logic**:
-- Total score >= 70: **DO V2G** (discharge at -5kW)
-- Total score < 70: **SKIP** (continue normal charging)
-
-### Real-Time Implematation
-
-The decision engine integrates with EVerest through:
-
-1. **MQTT Communication**:
-   - Subscribes to EVSE state updates (`everest/modules/connector_1/impl/evse/var`)
-   - Monitors charging session start/end events
-
-2. **Session Evaluation**:
-   - On sessiong start: evaluates V2G opportunity
-   - Considers current hour, user profile, battery SOC, location
-   - Makes real-time decision within seconds
-
-3. **Command Execution**:
-   - Publishes power limit commands to EVerest Energy Manager
-   - Negative power values indicate discharge (V2G mode)
-   - Logs all decision for analysis and learning
-
-## Platform and Tools
-
-- **Programming Language**: Python 3.9+
-- **Data Processing**: Pandas, NumPy
-- **Visualization**: Matplotlib, Seaborn
-- **MQTT Communication**: paho-mqtt
-- **Charging Simulator**: EVerest (MQTT broker on localhost:1883)
-- **Development Environment**: Local machine with jupyter notebooks for analysis
 
 ## Revenue Calculation Methodology
 
@@ -159,3 +61,8 @@ Revenue potential was calculated using:
 
 These calculations provide realistic estimates of V2G economic potential based on actual user behaviour pattern and grid pricing data.
 
+## EVerest Integration
+
+Integration with EVerest uses MQTT messaging on localhost:1883.
+The system subscribes to everest/modules/connector_1/impl/evse/var to monitor EVSE state changes (PluggedIn, Charging, Unplugged, etc.). When a new session is detected, the decision engine evaluates V2G opportunity within <1 second and publishes commands to everest/energy_manager/set_external_limits.
+This architecture enables real-time decision-making without requiring prescheduled charging plans. Each session is evaluated independently based on current conditions.

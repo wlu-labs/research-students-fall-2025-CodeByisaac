@@ -1,174 +1,41 @@
 # Results
 
-This section presents the results of the V2G scheduling system, including revenue calculations, decision engine performance, and EVerest integration outcomes.
+## Decision Engine Performance
 
-## V2G Opportunity Identification
+Testing the decision engine on sample sessions validated the scoring logic. An evening apartment session (18:00, 8.5h duration, 75% SOC) scored 100 and correctly triggered V2G. A morning work session (09:00, 8.0h, 80% SOC) scored 0 (wrong time window) and correctly skipped V2G. A short public session (19:00, 1.5h, 70% SOC) scored 40 (insufficient duration) and correctly rejected.
 
-### Current State Analysis
+## Revenue Analysis
 
-Based on analysis of 72,856 charging sessions:
+### Conservative Scenario
 
-- **Total Session**: 72,856 per year (31.2 sessions/user/year)
-- **V2G Eligible Sessions**: 3,724 (5.1% of total)
-- **Average Discharge per V2G Session**: 8.7 kWh (50% of average 17.4 kWh session)
-- **Optimal V2G Window**: 17:00-20:00 (4-hour period)
+Using current 5.1% V2G availability and CAISO pricing ($0.0336/kWh), we calculated:
+- 3,724 V2G-eligible sessions annually
+- Average discharge: 8.7 kWh per session (50% of average 17.4 kWh)
+- Revenue per session: $0.29
+- **Total annual revenue: $1,089.92**
+- **Per user: $0.47/year**This represents baseline performance without optimization.
 
-This 5.1% V2G availability rate represents the baseline without targeted engagement or optimization strategies.
+### Optimistic Scenario
 
-### Decision Engine Performance
+With targeted engagement focusing on high value locations and user segments, we project:
+- V2G participation increases to 12% (8,743 sessions)
+- Better timing during integrated hours improves revenue/session by 20%
+- Revenue per session: $0.35
+- **Total annual revenue: $3,070.54**
+- **Per user: $1.31/year**
 
-The scoring-based decision engine was tested on sample sessions:
+This 2.8x improvement demonstrates the value of data-driven targeting.
 
-| Session | Location | Hour | Duration | SOC | Score | Decision |
-|---------|----------|------|----------|-----|-------|----------|
-| 1 | Apartment | 18:00 | 8.5h | 75% | 100 | **DO V2G** |
-| 2 | Public Parking | 18:00 | 1.2h | 45% | 40 | SKIP (too short) |
-| 3 | Company | 09:00 | 8.0h | 80% | 0 | SKIP (wrong time) |
-| 4 | Resort | 19:00 | 4.5h | 70% | 100 | **DO V2G** |
+## Scale Projections
 
-**Decision Criteria**: Score >= 70 triggers V2G activation
-- Session 1 and 4 meet all criteria (optimal time, sufficient duration, high-value location, adequate SOC)
-- Session 2 fails duration check (1.2h < 3h minimum)
-- Session 3 fails time window check (09:00 outside 17:00-20:00)
+Extrapolating to larger fleets shows significant potential:
+- 1,000 vehicles: $1,314/year (optimistic)
+- 5,000 vehicles: $6,570/year
+- 10,000 vehicles: $13,139/year
+While individual user revenue is modest, fleet scale deployment could generate meaningful revenue streams.
 
-## Revenue Potential Analysis
+## Limitations
 
-### Conservative Scenario (Current State)
+Several limitatations constrain the analysis. The dataset comes from a single geographic region, limiting generalizability. Battery degradation impacts from frequent V2G cycles are not quantified, this could affect long term user willingness.Analysis assumes bidirectional charging infrastructure availability, which may not exist in all locations. User adoption rates may be different from projections based on actual incentives and user preferences.
 
-Using current V2G availability rates and grid pricing:
-
-**Input Parameters**:
-- Total users: 2,337
-- V2G availability: 5.1%
-- Average sessions/user/year: 31.2
-- Average energy/session: 17.4 kWh
-- Revenue per kWh: \$0.0336 (from CAISO pricing)
-- Integrate V2G hours/day: 4 hours (17:00-20:00)
-
-**Calculations**:
-- Total sessions/year: 72,856
-- V2G eligible sessions: 3,724 (5.1%)
-- Average discharge/session: 8.7 kWh
-- Revenue per V2G session: \$0.29
-
-**Results**:
-- **Total annual revenue**: \$1,089.92
-- **Revenue per user/year**: \$0.47
-- **Revenue per V2G session: \$0.04
-
-This conservative scenario represents the current state without optimization or targeted engagement.
-
-### Optimistic Scenario (With V2G Scheduler)
-
-With targeted engagement and optimization:
-
-**Assumptions**:
-- Target high-value users (apartments, evening chargers)
-- Increase V2G participation: 5.1% -> 12%
-- Better timing (integrated hours): +20% revenue/session
-
-**Calculation**:
-- V2G eligible sessions: 8,743 (12% of total)
-- Revenue per session: \$0.35 (20% improvement from optimal timing)
-- Total annual revenue: \$3,070.54
-
-**Improvement**: 2.8x increase in total revenue, 2.8x increase per user compared to conservative scenario.
-
-### Scale Projections
-
-Extrapolating to larger fleets:
-
-| Fleet Size | Annual Revenue (Conservative) | Annual Revenue (Optimistic) |
-|------------|------------------------------|----------------------------|
-| 1,000 vehicles | \$470 | \$1,314 |
-| 5,000 vehicles | \$2,350 | \$6,570 |
-| 10,000 vehicles | \$4,700 | \$13,139 |
-
-These projections demonstrate the scalability of the V2G scheduling approach, with optimistic scenarios showing significant revenue potential at scale.
-
-## EVerest Integration Results
-
-### Real-Time Decision Making
-
-The V2G scheduler was successfully integrated with the EVerest charging simulator:
-
-**Integration Architecture**:
-- MQTT communication on localhost::1883
-- Subscribes to EVSE state updates
-- Publishes power limit commands to Energy Manager
-- Real-time decision latency: < 1 second
-
-**Test Scenarios**:
-
-1. **Evening Apartment Session**:
-   - User connects at 18:00
-   - Location: Apartment
-   - SOC: 75%
-   - Duration: 8 hours
-   - **Decision**: V2G activated (-5kW discharge)
-   - **Reason**: Optimal hour + high-value location + sufficient duration
-
-2. **Morning Work Session**:
-   - User connects at 09:00
-   - Location: Company
-   - SOC: 80%
-   - Duration: 8 hours
-   - **Decision**: Normal charging (no V2G)
-   - **Reason**: Outside optimal time window (17:00-20:00)
-
-3. **Short Public Session**:
-   - User connects at 19:00
-   - Location: Public parking lot
-   - SOC: 70%
-   - Duration: 1.5 hours
-   - **Decision**: Normal charging (no V2G)
-   - **Reason**: Insufficient duration (< 3 hours minimum)
-
-### System Performance Metrics
-
-**Decision Accuracy**: 100% (all decisions align with scoring criteria)
-**Response Time**: < 1 second from session start to decision
-**MQTT Reliability**: 100% message delivery in test scenarios
-**Command Execution**: Successful power limit updates in EVerest
-
-## Key performance Indicators
-
-### V2G Participation Rate
-
-- **Baseline**: 5.1% of sessions eligible
-- **With Targeting**: 12% potential (2.4x improvement)
-- **Target Segment**: Apartment locations (10.4% baseline), evening chargers (21.7% of users)
-
-### Economic Efficiency
-
-- **Revenue per V2G Session**: \$0.29 (conservative) to \$0.35 (optimistic)
-- **Cost per Decision**: Negligible (automated system)
-- **ROI**: Postive for users participating in V2G program
-
-### Grid Support Potential
-
-- **Energy Discharged**: 8.7 kWh per V2G session average
-- **Daily Potential**: 1,741 kWh (based on 200 V2G sessions/day)
-- **Peak Hour Support**: 4-hour window (17:00-20:00) aligns with grid peak demand
-
-## Limitations and Constraints
-
-1. **Low Baseline Availability**: Only 5.1% of sessions are V2G-eligible, limiting overall participation
-2. **Temporal Constraints**: Optimal window limited to 4 hours (17:00-20:00)
-3. **Battery Degradation**: Long-term impact of frequent V2G cycles not quantified
-4. **User Adoption**: Assumes user willingness to participate; actual adoption may vary
-5. **Grid Infrastructure**: Assumes bidirectional charging infrastructure availability
-
-## Comparison with Baseline
-
-**Without Data-Driven Scheduler**:
-- Random V2G activation: ~2-3% participation
-- No user targeting: Lower revenue per session
-- Fixed time windows: Miss optimal opportunities
-
-**With Data-Driven Scheduler**:
-- Targeted activation: 5.1% baseline, 12% potential
-- User segmentation: Higher revenue per session (\$0.35 vs \$0.29)
-- Integrated timing: Perfect alignment with grid needs
-
-**Improvement**: 2-4x increase in participation, 20% increase in revenue per session, optimal grid alignment.
+The optimal V2G window is narrow (4 hours), which limits participation potential. Expanding this window could increase participation but may reduce economic efficiency due to lower price differentials.
